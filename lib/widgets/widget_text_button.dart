@@ -1,9 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:ungserviceofficer/utility/my_constant.dart';
 import 'package:ungserviceofficer/widgets/widget_text.dart';
 
-class WidgetButton extends StatelessWidget {
-  const WidgetButton({
+class WidgetTextButton extends StatelessWidget {
+  const WidgetTextButton({
     Key? key,
     required this.label,
     required this.pressFunc,
@@ -14,6 +15,11 @@ class WidgetButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(onPressed: pressFunc, child: WidgetText(text: label));
+    return TextButton(
+        onPressed: pressFunc,
+        child: WidgetText(
+          text: label,
+          textStyle: MyConstant().h3ActiveStyle(),
+        ));
   }
 }

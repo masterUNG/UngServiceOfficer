@@ -1,10 +1,19 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:ungserviceofficer/utility/my_constant.dart';
 
 class WidgetText extends StatelessWidget {
-  const WidgetText({super.key});
+  const WidgetText({
+    Key? key,
+    required this.text,
+    this.textStyle,
+  }) : super(key: key);
+
+  final String text;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Text(text, style: textStyle ?? MyConstant().h3Style(),);
   }
 }
