@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class MyConstant {
+  static Color bgColor = Colors.white;
+  static Color dark = Colors.black;
+
+  BoxDecoration curveBorder() => BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(15),
+      );
+
   TextStyle h1Style() => const TextStyle(
         fontSize: 36,
         fontWeight: FontWeight.bold,

@@ -12,7 +12,12 @@ class MyDialog {
     required this.context,
   });
 
-  void normalDialog({required String title, required String detail}) {
+  void normalDialog({
+    required String title,
+    required String detail,
+    Function()? activeFunc,
+    String? label,
+  }) {
     Get.dialog(
       AlertDialog(
         icon: const WidgetImage(
@@ -24,8 +29,11 @@ class MyDialog {
         ),
         content: WidgetText(text: detail),
         actions: [
+          activeFunc == null
+              ? const SizedBox()
+              : WidgetTextButton(label: label ?? '', pressFunc: activeFunc),
           WidgetTextButton(
-            label: 'OK',
+            label: activeFunc == null ? 'OK' : 'Cancel',
             pressFunc: () {
               Get.back();
             },
