@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ungserviceofficer/models/user_model.dart';
+import 'package:ungserviceofficer/states/main_home.dart';
 import 'package:ungserviceofficer/utility/app_controller.dart';
 import 'package:ungserviceofficer/utility/my_constant.dart';
 import 'package:ungserviceofficer/utility/my_dialog.dart';
@@ -67,7 +72,9 @@ class _LoginState extends State<Login> {
                               MyDialog(context: context).normalDialog(
                                   title: 'Have Space ?',
                                   detail: 'Please Fill Every Blank');
-                            } else {}
+                            } else {
+                              processCheckLogin();
+                            }
                           },
                         ),
                       )
@@ -92,5 +99,33 @@ class _LoginState extends State<Login> {
         )
       ],
     );
+  }
+
+  Future<void> processCheckLogin() async {
+    String urlAPI =
+        'https://www.androidthai.in.th/fluttertraining/getUserWhereUserUng.php?isAdd=true&user=$user';
+    await Dio().get(urlAPI).then((value) {
+      print('value = $value');
+
+      if (value.toString() == 'null') {
+        MyDialog(context: context).normalDialog(
+            title: 'User False?', detail: 'ไม่มี $user นี่ในฐานข้อมูล');
+      } else {
+        var result = json.decode(value.data);
+        print('result = $result');
+
+        for (var element in result) {
+          print('element = $element');
+          UserModle model = UserModle.fromMap(element);
+
+          if (password == model.password) {
+            Get.off(const MainHome());
+          } else {
+            MyDialog(context: context).normalDialog(
+                title: 'Password False', detail: 'กรุณาลองใหม่ Passowd ผิด');
+          }
+        }
+      }
+    });
   }
 }
