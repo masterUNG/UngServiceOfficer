@@ -7,6 +7,13 @@ class Queue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: WidgetText(text: 'จองคิว', textStyle: MyConstant().h2Style(),),),);
+    return Scaffold(
+      appBar: AppBar(
+        title: WidgetText(
+          text: 'จองคิว',
+          textStyle: MyConstant().h2Style(),
+        ),
+      ),
+    );
   }
 }
