@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:ungserviceofficer/utility/my_constant.dart';
+import 'package:ungserviceofficer/utility/my_dialog.dart';
 import 'package:ungserviceofficer/widgets/widget_text.dart';
 
 class ReadQR extends StatefulWidget {
@@ -18,6 +20,8 @@ class _ReadQRState extends State<ReadQR> {
   String? resultBarcode;
   QRViewController? qrViewController;
   DateTime dateTime = DateTime.now();
+
+  Position? position;
 
   @override
   void reassemble() {
@@ -37,6 +41,64 @@ class _ReadQRState extends State<ReadQR> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    processFindPosition();
+  }
+
+  Future<void> processFindPosition() async {
+    bool locationServiceEnable = await Geolocator.isLocationServiceEnabled();
+    LocationPermission permission;
+
+    if (locationServiceEnable) {
+      // open Location
+
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.deniedForever) {
+        dialogOpenPermission();
+      } else {
+        if (permission == LocationPermission.denied) {
+          permission = await Geolocator.requestPermission();
+          if ((permission != LocationPermission.always) &&
+              (permission != LocationPermission.whileInUse)) {
+            dialogOpenPermission();
+          } else {
+            position = await Geolocator.getCurrentPosition();
+            setState(() {});
+          }
+        } else {
+          //Location OK
+          position = await Geolocator.getCurrentPosition();
+          setState(() {});
+        }
+      }
+    } else {
+      //close Location
+      MyDialog(context: context).normalDialog(
+        title: 'Off Location Service',
+        detail: 'Please Open Location Service',
+        label: 'ไปเปิด Location',
+        activeFunc: () {
+          Geolocator.openLocationSettings();
+          exit(0);
+        },
+      );
+    }
+  }
+
+  void dialogOpenPermission() {
+    MyDialog(context: context).normalDialog(
+      title: 'Permission ไม่อนุญาติ',
+      detail: 'ไปอนุญาติ Permission ก่อน',
+      label: 'Open Permission',
+      activeFunc: () {
+        Geolocator.openAppSettings();
+        exit(0);
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -50,7 +112,8 @@ class _ReadQRState extends State<ReadQR> {
           children: [
             qrCamera(),
             showResult(),
-            WidgetText(text: dateTime.toString())
+            WidgetText(text: dateTime.toString()),
+            position == null ? const SizedBox() : WidgetText(text: '${position!.latitude}, ${position!.longitude}') ,
           ],
         ),
       ),

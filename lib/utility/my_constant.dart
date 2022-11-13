@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class MyConstant {
+
+
+  
+
   static Color bgColor = Colors.white;
   static Color dark = Colors.black;
 
