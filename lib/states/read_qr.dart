@@ -16,7 +16,7 @@ class ReadQR extends StatefulWidget {
 
 class _ReadQRState extends State<ReadQR> {
   final qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode? barcode;
+ 
   String? resultBarcode;
   QRViewController? qrViewController;
   DateTime dateTime = DateTime.now();
